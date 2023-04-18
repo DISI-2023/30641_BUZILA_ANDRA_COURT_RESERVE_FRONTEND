@@ -1,4 +1,4 @@
-import LoginModal from "./components/login-modal";
+import LoginModal from "../../components/login-modal";
 
 function Homepage() {
 

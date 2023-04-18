@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { FormGroup, Input, Label, Button} from 'reactstrap';
 
 import LoginValidators from "../validators/login-validators";
-import ErrorHandler from "../../commons/errorhandling/error-handler";
+import ErrorHandler from "../commons/errorhandling/error-handler";
 import * as UserAPI from "../api/login-api";
 import {useNavigate} from "react-router-dom";
 
