@@ -1,22 +1,32 @@
 import "./App.css";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Homepage from "./pages/homepage/homepage";
-import ReservationsPage from "./pages/reservations/reservations-page";
-import AdminPage from "./pages/admin/admin-page";
+import Menu from "./components/Menu.js";
+import { Route, Routes } from "react-router-dom";
+import ApplicationRoutes from "./AppRoutes";
+import React, { useState, createContext, useMemo } from "react";
+
+export const AppContext = createContext();
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(true);
+  const appRoutes = useMemo(() => {
+    return ApplicationRoutes();
+  }, []);
+
   return (
-    <div>
-      <Router>
-        <div>
-          <Routes>
-            <Route exact path="/" element={<Homepage />} />
-            <Route exact path="/reservations" element={<ReservationsPage />} />
-            <Route exact path="/admin" element={<AdminPage />} />
-          </Routes>
-        </div>
-      </Router>
-    </div>
+    <AppContext.Provider
+      value={{ isAdmin, isLoggedIn, setIsLoggedIn, setIsAdmin }}
+    >
+      <div className="App">
+        <Menu />
+        <Routes>
+          {appRoutes.map((route, index) => {
+            const { element, requireAuth, ...rest } = route;
+            return <Route key={index} {...rest} element={element} />;
+          })}
+        </Routes>
+      </div>
+    </AppContext.Provider>
   );
 }
 
