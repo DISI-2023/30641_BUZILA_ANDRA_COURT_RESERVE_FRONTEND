@@ -4,7 +4,7 @@
   justify-content: center;
   padding-top: calc(100vh - 80px);
   height: calc(100vh - 80px);
-  font-family: "Arial", sans-serif;
+  font-family: -webkit-body;
   font-size: 2rem;
   overflow: hidden;
   padding: 0 20%;
@@ -68,5 +68,4 @@
   width: 100vw;
   height: calc(100vh + 80px);
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 9999;
 }
