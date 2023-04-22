@@ -8,7 +8,7 @@ import LoginModal from "../components/login-modal";
 import { AppContext } from "../App";
 
 const Menu = () => {
-  const { isLoggedIn, setIsLoggedIn, isAdmin } = useContext(AppContext);
+  const { isLoggedIn, isAdmin } = useContext(AppContext);
 
   return (
     <header className="header">
