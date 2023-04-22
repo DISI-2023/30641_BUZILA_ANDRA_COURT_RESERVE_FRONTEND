@@ -22,4 +22,21 @@ function deleteCourt(court, callback) {
   RestApiClient.performRequest(request, callback);
 }
 
-export { deleteCourt };
+function modifyCourt(court, callback) {
+  let request = new Request(
+    HOST.backend_api + endpoint.court + "/updateCourt",
+    {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(court),
+    }
+  );
+
+  console.log(request.url);
+  RestApiClient.performRequest(request, callback);
+}
+
+export { deleteCourt, modifyCourt };
