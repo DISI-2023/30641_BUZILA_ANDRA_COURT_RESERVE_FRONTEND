@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { NavItem } from "reactstrap";
 import { Link } from "react-router-dom";
 import { PAGES_URL } from "../constants/PagesUrl";
 import "./menu.scss";
 import Logo from "../assets/logoo.png";
+import LoginModal from "../components/login-modal";
+import { AppContext } from "../App";
 
 const Menu = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isLoggedIn, setIsLoggedIn, isAdmin } = useContext(AppContext);
 
   return (
     <header className="header">
@@ -26,14 +28,18 @@ const Menu = () => {
           <>
             <NavItem>
               <Link tag={Link} to={PAGES_URL.Home}>
-                Search
+                Courts
               </Link>
             </NavItem>
-            <NavItem>
-              <Link tag={Link} to={PAGES_URL.Home}>
-                Add location
-              </Link>
-            </NavItem>
+            {isAdmin && (
+              <>
+                <NavItem>
+                  <Link tag={Link} to={PAGES_URL.Home}>
+                    Locations
+                  </Link>
+                </NavItem>
+              </>
+            )}
             <NavItem>
               <Link tag={Link} to={PAGES_URL.Home}>
                 Reservation
@@ -48,8 +54,8 @@ const Menu = () => {
         ) : (
           <>
             <NavItem>
-              <Link tag={Link} to={PAGES_URL.Login}>
-                Login
+              <Link tag={Link} to={PAGES_URL.Home}>
+                Courts
               </Link>
             </NavItem>
             <NavItem>
@@ -58,8 +64,8 @@ const Menu = () => {
               </Link>
             </NavItem>
             <NavItem>
-              <Link tag={Link} to={PAGES_URL.Home}>
-                Search
+              <Link tag={Link} to={PAGES_URL.Login}>
+                <LoginModal />
               </Link>
             </NavItem>
           </>
