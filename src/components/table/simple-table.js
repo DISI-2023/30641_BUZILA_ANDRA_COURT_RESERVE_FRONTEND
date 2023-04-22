@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect } from "react";
 import {
   useTable,
   usePagination,
@@ -8,9 +8,11 @@ import {
 import { Button, Table } from "reactstrap";
 import "./simple-table-style.css";
 
-function SimpleTable(props) {
-  const data = useMemo(() => props.data, []);
-  const columns = useMemo(() => props.columns, []);
+function SimpleTable({ data, columns }) {
+  useEffect(() => {
+    console.log(data);
+    console.log(columns);
+  }, [data]);
 
   const {
     getTableProps, // getTableProps returns "role: table";
@@ -132,4 +134,5 @@ function SimpleTable(props) {
     </div>
   );
 }
+
 export default SimpleTable;

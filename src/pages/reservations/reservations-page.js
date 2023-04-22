@@ -4,40 +4,26 @@ import React, { useEffect, useState } from "react";
 import ErrorHandler from "../../commons/errorhandling/error-handler";
 import SearchCourts from "../../components/search-courts";
 
-const dummyData = [
-  {
-    locationId: "1",
-    locationAddress: "Cluj-Napoca",
-    locationLongitude: "sadasdsadasd",
-    locationLatitude: "dvzczcxzxc",
-    courtId: "1",
-    courtType: "ceva",
-    courtName: "altceva",
-  },
-  {
-    locationId: "1",
-    locationAddress: "Cluj-Napoca",
-    locationLongitude: "sadasdsadasd",
-    locationLatitude: "dvzczcxzxc",
-    courtId: "1",
-    courtType: "ceva",
-    courtName: "altceva",
-  },
+const courtsColumns = [
+  { Header: "Location ID", accessor: "location_id" },
+  { Header: "Location Address", accessor: "location_address" },
+  { Header: "Location Longitude", accessor: "location_longitude" },
+  { Header: "Location Latitude", accessor: "location_latitude" },
+  { Header: "Court Type", accessor: "type" },
+  { Header: "Court Name", accessor: "name" },
 ];
 
-const courtsColumns = [
-  { Header: "Location ID", accessor: "locationId" },
-  { Header: "Location Address", accessor: "locationAddress" },
-  { Header: "Location Longitude", accessor: "locationLongitude" },
-  { Header: "Location Latitude", accessor: "locationLatitude" },
-  { Header: "Court ID", accessor: "courtId" },
-  { Header: "Court Type", accessor: "courtType" },
-  { Header: "Court Name", accessor: "courtName" },
-];
+const initialValues = {
+  locationId: "",
+  locationAddress: "",
+  locationLongitude: 0,
+  locationLatitude: 0,
+  availableCourts: [],
+};
 
 function ReservationsPage() {
   const [data, setData] = useState([]);
-  const [columns, setColumns] = useState(courtsColumns);
+  const [columns] = useState(courtsColumns);
   const [error, setError] = useState(0);
 
   useEffect(() => {
@@ -47,7 +33,32 @@ function ReservationsPage() {
   function fetchAvailableCourts(searchInput) {
     return ReservationsAPI.getAvailableCourts(searchInput, (result, status) => {
       if (result !== null && status === 200) {
-        setData(result);
+        setData([]);
+        let index = 0;
+        let newElement = {
+          location_id: 0,
+          location_address: 0,
+          location_longitude: 0,
+          location_latitude: 0,
+          type: "",
+          name: "",
+        };
+        result.availableCourts.forEach((elem) => {
+          console.log("Elem: " + elem);
+          if (index % 3 === 1) {
+            newElement.type = elem;
+          } else if (index % 3 === 2) {
+            newElement.name = elem;
+          } else {
+            newElement.location_id = result.locationId;
+            newElement.location_address = result.locationAddress;
+            newElement.location_longitude = result.locationLongitude;
+            newElement.location_latitude = result.locationLatitude;
+            console.log(newElement.locationId);
+            setData((previousData) => [...previousData, newElement]);
+          }
+          index++;
+        });
       } else {
         setError(status);
       }
@@ -57,24 +68,19 @@ function ReservationsPage() {
   function fetchAllLocationsWithCourts() {
     return ReservationsAPI.getAllLocationsWithCourts((result, status) => {
       if (result != null && status === 200) {
-        // imi returneaza lista cu: (id_court, type_court, name_court, location_id, location_address);
-        // trebuie sa mapez fiecare tupla la (location_id, locations_address, location_long, location_lat,
-        // court_id, court_type, court_name);
-        setData([]);
-        result = dummyData;
-        result.map((elem) =>
-          elem.map(
-            data.push({
-              locationId: elem[0],
-              locationAddress: elem[1],
-              locationLongitude: elem[2],
-              locationLatitude: elem[3],
-              courtId: elem[4],
-              courtType: elem[5],
-              courtName: elem[6],
-            })
-          )
-        );
+        let courtsList = [];
+        result.forEach((elem) => {
+          let newElement = {
+            location_id: elem.location_id,
+            location_address: elem.location_address,
+            location_longitude: elem.location_longitude,
+            location_latitude: elem.location_latitude,
+            type: elem.type,
+            name: elem.name,
+          };
+          courtsList.push(newElement);
+        });
+        setData((previousData) => courtsList);
       } else {
         setError(status);
       }
@@ -83,8 +89,11 @@ function ReservationsPage() {
 
   return (
     <div>
-      <SimpleTable data={dummyData} columns={columns} />
-      <SearchCourts searchFunction={fetchAvailableCourts} />
+      <SimpleTable data={data} columns={columns} />
+      <SearchCourts
+        searchFunction={fetchAvailableCourts}
+        spareFunction={fetchAllLocationsWithCourts}
+      />
       {error > 0 && <ErrorHandler />}
     </div>
   );

@@ -7,20 +7,33 @@ import "react-time-picker/dist/TimePicker.css";
 import "react-clock/dist/Clock.css";
 import { useState } from "react";
 
-function SearchCourts({ searchFunction }) {
+function SearchCourts({ searchFunction, spareFunction }) {
   const [locationId, setLocationId] = useState(null);
   const [value, setValue] = useState(new Date());
   const [time, setTime] = useState(
     new Date().getHours() + ":" + new Date().getMinutes()
   );
 
-  function submitSearch(event) {
-    let newValue = event.target.value;
+  function handleChange(event) {
+    setLocationId(() => event.target.value);
+  }
 
-    //validate;
-
-    setLocationId(newValue);
-    searchFunction({ locationId, value });
+  function submitSearch() {
+    if (
+      time !== null &&
+      value !== null &&
+      locationId !== null &&
+      locationId !== ""
+    ) {
+      value.setHours(Number(time.split(":")[0]));
+      let searchInput = {
+        locationId: locationId,
+        dateForCourts: value.toISOString(),
+      };
+      searchFunction(searchInput);
+    } else {
+      spareFunction();
+    }
   }
 
   return (
@@ -31,6 +44,7 @@ function SearchCourts({ searchFunction }) {
         type="search"
         placeholder="...type location id"
         defaultValue={locationId}
+        onChange={handleChange}
         style={{ width: "25%", alignSelf: "center", margin: "0 1% 0 1%" }}
       />
       <DatePicker
