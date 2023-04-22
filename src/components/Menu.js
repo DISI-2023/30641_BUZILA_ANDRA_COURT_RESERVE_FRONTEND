@@ -27,14 +27,14 @@ const Menu = () => {
         {isLoggedIn ? (
           <>
             <NavItem>
-              <Link tag={Link} to={PAGES_URL.Home}>
+              <Link tag={Link} to={PAGES_URL.Reservations}>
                 Courts
               </Link>
             </NavItem>
             {isAdmin && (
               <>
                 <NavItem>
-                  <Link tag={Link} to={PAGES_URL.Home}>
+                  <Link tag={Link} to={PAGES_URL.Locations}>
                     Locations
                   </Link>
                 </NavItem>
