@@ -2,6 +2,7 @@ import SimpleTable from "../../components/table/simple-table";
 import * as ReservationsAPI from "../../api/reservations-api";
 import React, {useEffect, useState} from "react";
 import ErrorHandler from "../../commons/errorhandling/error-handler";
+import SearchCourts from "../../components/search-courts";
 
 const dummyData = [
     {
@@ -56,7 +57,7 @@ function ReservationsPage(){
 
     function fetchAllLocationsWithCourts(){
         return ReservationsAPI.getAllLocationsWithCourts((result, status) => {
-            if (result != null && status == 200){
+            if (result != null && status === 200){
                 setData(result);
             }
             else{
@@ -68,6 +69,7 @@ function ReservationsPage(){
     return(
         <div>
             <SimpleTable data={dummyData} columns={columns}/>
+            <SearchCourts searchFunction={fetchAvailableCourts}/>
             {
                 error > 0 && <ErrorHandler />
             }
