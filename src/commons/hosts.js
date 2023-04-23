@@ -1,3 +1,4 @@
 export const HOST = {
-  backend_api: "http://localhost:8080",
+    //modify with your backend port
+    backend_api: 'http://localhost:8080',
 };
