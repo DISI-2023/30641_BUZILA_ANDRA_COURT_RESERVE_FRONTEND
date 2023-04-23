@@ -47,7 +47,7 @@ const Menu = () => {
               </Link>
             </NavItem>
             <NavItem>
-              <Link tag={Link} to={PAGES_URL.Logout} onClick={deleteUser}>
+              <Link tag={Link} to={PAGES_URL.Home} onClick={deleteUser}>
                 Logout
               </Link>
             </NavItem>
