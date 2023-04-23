@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState} from 'react';
 import { FormGroup, Input, Label, Button} from 'reactstrap';
 
 import LoginValidators from "../validators/login-validators";
@@ -66,7 +66,6 @@ function LoginForm() {
     }
 
     function loginUser(user) {
-        console.log("POST STARTS!");
         return UserAPI.loginUser(user, (result, status) => {
             if (result !== null && (status === 200 || status === 201)) {
                 saveUser(result);
@@ -91,7 +90,7 @@ function LoginForm() {
             email: formValues.email.value,
             password: formValues.password.value
         };
-        // loginUser(user);
+        loginUser(user);
         console.log("You pressed the submit button!");
     }
 
