@@ -6,7 +6,7 @@ import "./menu.scss";
 import Logo from "../assets/logoo.png";
 import LoginModal from "../components/login-modal";
 import { AppContext } from "../App";
-import LogoutButton from "./logout-button";
+import { deleteUser } from "./logout-button";
 
 const Menu = () => {
   const { isLoggedIn, isAdmin } = useContext(AppContext);
@@ -47,8 +47,8 @@ const Menu = () => {
               </Link>
             </NavItem>
             <NavItem>
-              <Link tag={Link} to={PAGES_URL.Logout}>
-                <LogoutButton />
+              <Link tag={Link} to={PAGES_URL.Logout} onClick={deleteUser}>
+                Logout
               </Link>
             </NavItem>
           </>
