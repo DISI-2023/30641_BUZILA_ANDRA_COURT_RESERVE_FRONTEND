@@ -12,16 +12,16 @@ const ApplicationRoutes = () => {
       element: <Home />,
     },
     {
-        path: PAGES_URL.Register,
-        element: <Register />,
+      path: PAGES_URL.Register,
+      element: <Register />,
     },
     {
-        path: PAGES_URL.Reservations,
-        element: <ReservationsPage />,
+      path: PAGES_URL.Courts,
+      element: <ReservationsPage />,
     },
     {
-        path: PAGES_URL.Locations,
-        element: <AdminPage />,
+      path: PAGES_URL.Locations,
+      element: <AdminPage />,
     },
   ];
 };

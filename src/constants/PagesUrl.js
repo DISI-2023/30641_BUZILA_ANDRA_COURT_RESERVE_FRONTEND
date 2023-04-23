@@ -1,6 +1,6 @@
 export const PAGES_URL = {
   Home: "/",
   Register: "/register",
-  Reservations: "/reservations",
+  Courts: "/courts",
   Locations: "/locations",
 };

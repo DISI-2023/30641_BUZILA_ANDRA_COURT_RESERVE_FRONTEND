@@ -28,7 +28,7 @@ const Menu = () => {
         {isLoggedIn ? (
           <>
             <NavItem>
-              <Link tag={Link} to={PAGES_URL.Reservations}>
+              <Link tag={Link} to={PAGES_URL.Courts}>
                 Courts
               </Link>
             </NavItem>
@@ -55,7 +55,7 @@ const Menu = () => {
         ) : (
           <>
             <NavItem>
-              <Link tag={Link} to={PAGES_URL.Reservations}>
+              <Link tag={Link} to={PAGES_URL.Courts}>
                 Courts
               </Link>
             </NavItem>
