@@ -8,7 +8,7 @@ export const AppContext = createContext();
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
   const appRoutes = useMemo(() => {
     return ApplicationRoutes();
   }, []);

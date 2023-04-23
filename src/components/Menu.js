@@ -9,7 +9,21 @@ import { AppContext } from "../App";
 import { deleteUser } from "./delete-user";
 
 const Menu = () => {
-  const { isLoggedIn, isAdmin } = useContext(AppContext);
+  const { isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin } = useContext(AppContext);
+
+  const onClickLogout = () => {
+    deleteUser()
+    setIsAdmin(false)
+    let isLoggedInStorage = localStorage.getItem("isLoggedIn");
+    if (isLoggedInStorage != null) {
+      localStorage.removeItem("isLoggedIn");
+      setIsLoggedIn(false);
+    } else {
+      alert("You are not logged in!");
+    }
+  }
+
+  
 
   return (
     <header className="header">
@@ -47,7 +61,7 @@ const Menu = () => {
               </Link>
             </NavItem>
             <NavItem>
-              <Link tag={Link} to={PAGES_URL.Home} onClick={deleteUser}>
+              <Link tag={Link} to={PAGES_URL.Home} onClick={onClickLogout}>
                 Logout
               </Link>
             </NavItem>
