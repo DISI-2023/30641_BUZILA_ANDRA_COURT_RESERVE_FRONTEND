@@ -34,6 +34,7 @@ function LoginForm() {
   const [passwordType, setPasswordType] = useState("password");
 
   const [error, setError] = useState(0);
+  let navigate = useNavigate();
 
   function handleChange(event) {
     let name = event.target.name;
@@ -75,6 +76,15 @@ function LoginForm() {
     return UserAPI.loginUser(user, (result, status) => {
       if (result !== null && (status === 200 || status === 201)) {
         saveUser(result);
+        let loggedUser = localStorage.getItem("loggedUser");
+        if (loggedUser != null) {
+          let role = JSON.parse(loggedUser).role;
+          if (role === "admin") {
+            navigate("/"); // change it to admin page;
+          } else if (role === "client") {
+            navigate("/"); // change it to client page;
+          }
+        }
       } else {
         setError(status);
       }
