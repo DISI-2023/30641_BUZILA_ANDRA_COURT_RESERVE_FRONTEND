@@ -1,4 +1,5 @@
 import Home from "./pages/home/Home";
+import Register from "./pages/register/Register";
 import { PAGES_URL } from "./constants/PagesUrl";
 
 const ApplicationRoutes = () => {
@@ -6,6 +7,10 @@ const ApplicationRoutes = () => {
     {
       path: PAGES_URL.Home,
       element: <Home />,
+    },
+    {
+      path: PAGES_URL.Register,
+      element: <Register />,
     },
   ];
 };

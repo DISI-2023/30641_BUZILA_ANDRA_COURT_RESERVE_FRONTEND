@@ -59,7 +59,7 @@ const Menu = () => {
               </Link>
             </NavItem>
             <NavItem>
-              <Link tag={Link} to={PAGES_URL.Home}>
+              <Link tag={Link} to={PAGES_URL.Register}>
                 Register
               </Link>
             </NavItem>
