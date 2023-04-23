@@ -30,7 +30,7 @@ const formInit = {
 };
 
 function LoginForm() {
-    const { setIsLoggedIn } = useContext(AppContext);
+    const { setIsLoggedIn, setIsAdmin } = useContext(AppContext);
     const [formIsValid, setFormIsValid] = useState(false);
     const [formValues, setFormValues] = useState(formInit);
     const [passwordType, setPasswordType] = useState("password");
@@ -74,7 +74,8 @@ function LoginForm() {
                 if(loggedUser != null) {
                     let role = JSON.parse(loggedUser).role;
                     if(role === "admin"){
-                        navigate("/"); // change it to admin page;
+                        setIsAdmin(true);
+                        navigate("/"); // change it to client page;
                     }
                     else if(role === "client"){
                         navigate("/"); // change it to client page;

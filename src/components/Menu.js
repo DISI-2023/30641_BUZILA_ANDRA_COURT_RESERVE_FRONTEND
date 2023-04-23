@@ -9,10 +9,11 @@ import { AppContext } from "../App";
 import { deleteUser } from "./delete-user";
 
 const Menu = () => {
-  const { isLoggedIn, setIsLoggedIn,  isAdmin } = useContext(AppContext);
+  const { isLoggedIn, setIsLoggedIn, isAdmin, setIsAdmin } = useContext(AppContext);
 
   const onClickLogout = () => {
     deleteUser()
+    setIsAdmin(false)
     let isLoggedInStorage = localStorage.getItem("isLoggedIn");
     if (isLoggedInStorage != null) {
       localStorage.removeItem("isLoggedIn");
