@@ -87,6 +87,13 @@ function AdminPage() {
     });
   }
 
+  function deleteCourtById() {
+    let court = {
+      id: courtId,
+    };
+    deleteCourt(court);
+  }
+
   function handleChange(event) {
     setCourtId(() => event.target.value);
   }
@@ -122,7 +129,7 @@ function AdminPage() {
         <Button
           type="submit"
           color="primary"
-          onClick={deleteCourt}
+          onClick={deleteCourtById}
           style={{ alignSelf: "center", margin: "0 1% 0 1%" }}
         >
           Delete
