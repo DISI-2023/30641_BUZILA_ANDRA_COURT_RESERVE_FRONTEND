@@ -7,8 +7,8 @@ import React, { useState, createContext, useMemo } from "react";
 export const AppContext = createContext();
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const appRoutes = useMemo(() => {
     return ApplicationRoutes();
   }, []);
