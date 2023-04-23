@@ -59,11 +59,27 @@ function LoginForm() {
         setFormIsValid(() => (formIsValid));
     }
 
+    function saveUser(userData){
+        localStorage.setItem("loggedUser", JSON.stringify(userData));
+        console.log("(FROM POST)User id and role: " + JSON.parse(localStorage.getItem('loggedUser')).id + ", " +
+            JSON.parse(localStorage.getItem('loggedUser')).role);
+    }
+
     function loginUser(user) {
         console.log("POST STARTS!");
         return UserAPI.loginUser(user, (result, status) => {
             if (result !== null && (status === 200 || status === 201)) {
-                console.log("(FROM POST)Successfully logged in user with id: " + result.id);
+                saveUser(result);
+                let loggedUser = localStorage.getItem('loggedUser');
+                if(loggedUser != null) {
+                    let role = JSON.parse(loggedUser).role;
+                    if(role === "admin"){
+                        navigate("/"); // change it to admin page;
+                    }
+                    else if(role === "client"){
+                        navigate("/"); // change it to client page;
+                    }
+                }
             } else {
                 setError(status);
             }
@@ -75,7 +91,7 @@ function LoginForm() {
             email: formValues.email.value,
             password: formValues.password.value
         };
-        //loginUser(user);
+        // loginUser(user);
         console.log("You pressed the submit button!");
     }
 
