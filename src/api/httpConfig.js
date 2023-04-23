@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const devEndpoint = "https://localhost:3000";
+//Modify with your backend port
+const devEndpoint = "http://localhost:8080";
 
 export const customHttp = axios.create({
   baseURL: devEndpoint,
