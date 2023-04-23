@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Button, Modal, ModalBody, ModalHeader } from "reactstrap";
-import LoginForm from "./login-form";
+import UpdateCourtForm from "./update-court-form";
 
-function LoginModal() {
+function UpdateCourtModal({ getData, courtData }) {
   const [isSelected, setIsSelected] = useState(false);
 
   function toggleIsSelected() {
@@ -12,18 +12,18 @@ function LoginModal() {
   return (
     <div>
       <Button type={"button"} color="primary" onClick={toggleIsSelected}>
-        Login
+        Update
       </Button>
       <Modal isOpen={isSelected} toggle={toggleIsSelected} size="lg">
         <ModalHeader toggle={toggleIsSelected}>
           {" "}
-          Login to your account:{" "}
+          Modify a court's data:{" "}
         </ModalHeader>
         <ModalBody>
-          <LoginForm />
+          <UpdateCourtForm getData={getData} courtData={courtData} />
         </ModalBody>
       </Modal>
     </div>
   );
 }
-export default LoginModal;
+export default UpdateCourtModal;

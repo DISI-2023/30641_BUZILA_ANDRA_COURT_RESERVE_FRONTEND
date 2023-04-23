@@ -42,14 +42,14 @@ const Menu = () => {
         {isLoggedIn ? (
           <>
             <NavItem>
-              <Link tag={Link} to={PAGES_URL.Home}>
+              <Link tag={Link} to={PAGES_URL.Courts}>
                 Courts
               </Link>
             </NavItem>
             {isAdmin && (
               <>
                 <NavItem>
-                  <Link tag={Link} to={PAGES_URL.Home}>
+                  <Link tag={Link} to={PAGES_URL.Locations}>
                     Locations
                   </Link>
                 </NavItem>
@@ -69,7 +69,7 @@ const Menu = () => {
         ) : (
           <>
             <NavItem>
-              <Link tag={Link} to={PAGES_URL.Home}>
+              <Link tag={Link} to={PAGES_URL.Courts}>
                 Courts
               </Link>
             </NavItem>
@@ -79,7 +79,7 @@ const Menu = () => {
               </Link>
             </NavItem>
             <NavItem>
-              <Link tag={Link} to={PAGES_URL.Login}>
+              <Link tag={Link} to={PAGES_URL.Home}>
                 <LoginModal />
               </Link>
             </NavItem>
