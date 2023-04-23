@@ -6,7 +6,7 @@ import "./menu.scss";
 import Logo from "../assets/logoo.png";
 import LoginModal from "../components/login-modal";
 import { AppContext } from "../App";
-import { deleteUser } from "./logout-button";
+import { deleteUser } from "./delete-user";
 
 const Menu = () => {
   const { isLoggedIn, isAdmin } = useContext(AppContext);
