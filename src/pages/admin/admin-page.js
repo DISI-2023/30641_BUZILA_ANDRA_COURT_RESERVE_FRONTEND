@@ -4,6 +4,7 @@ import ErrorHandler from "../../commons/errorhandling/error-handler";
 import { Button, Input } from "reactstrap";
 import * as ReservationsAPI from "../../api/reservations-api";
 import * as AdminAPI from "../../api/admin-api";
+import UpdateCourtModal from "../../components/update-court-modal";
 
 const courtsColumns = [
   { Header: "Location ID", accessor: "location_id" },
@@ -15,11 +16,38 @@ const courtsColumns = [
   { Header: "Court Name", accessor: "name" },
 ];
 
+const formInit = {
+  id: {
+    value: "",
+    placeholder: "...court id",
+    valid: false,
+    touched: false,
+    validationRules: {
+      idValidation: true,
+      isRequired: true,
+    },
+  },
+  type: {
+    value: "",
+    placeholder: "Type...",
+    valid: true,
+    touched: false,
+    validationRules: {},
+  },
+  name: {
+    value: "",
+    placeholder: "Name...",
+    valid: true,
+    touched: false,
+    validationRules: {},
+  },
+};
+
 function AdminPage() {
   const [data, setData] = useState([]);
   const [columns] = useState(courtsColumns);
-  const [allLocationsId, setAllLocationsId] = useState([]);
   const [courtId, setCourtId] = useState(null);
+  const [courtData, setCourtData] = useState(formInit);
   const [error, setError] = useState(0);
 
   useEffect(() => {
@@ -36,7 +64,7 @@ function AdminPage() {
             location_address: elem.location_address,
             location_longitude: elem.location_longitude,
             location_latitude: elem.location_latitude,
-            // add court id;
+            court_id: elem.id,
             type: elem.type,
             name: elem.name,
           };
@@ -61,6 +89,17 @@ function AdminPage() {
 
   function handleChange(event) {
     setCourtId(() => event.target.value);
+  }
+
+  function getCourtData(updateCourtId) {
+    data.forEach((elem) => {
+      if (elem.court_id === updateCourtId) {
+        let newValue = { ...courtData };
+        newValue["type"].value = elem.type;
+        newValue["name"].value = elem.name;
+        setCourtData(() => newValue);
+      }
+    });
   }
 
   return (
@@ -88,6 +127,11 @@ function AdminPage() {
         >
           Delete
         </Button>
+        <UpdateCourtModal
+          getData={getCourtData}
+          courtData={courtData}
+          style={{ alignSelf: "center", margin: "0 1% 0 1%" }}
+        />
       </div>
       {error > 0 && <ErrorHandler />}
     </div>

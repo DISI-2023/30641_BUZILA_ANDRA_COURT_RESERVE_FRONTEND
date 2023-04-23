@@ -1,49 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { FormGroup, Input, Label, Button } from "reactstrap";
 
-import LoginValidators from "../validators/login-validators";
 import ErrorHandler from "../commons/errorhandling/error-handler";
 import * as AdminAPI from "../api/admin-api";
-import { useNavigate } from "react-router-dom";
+import IdValidator from "../validators/id-validator";
 
-const formInit = {
-  id: {
-    value: "",
-    placeholder: "...court id",
-    valid: false,
-    touched: false,
-    validationRules: {
-      // emailValidation: true,
-    },
-  },
-  type: {
-    value: "",
-    placeholder: "Type...",
-    valid: false,
-    touched: false,
-    validationRules: {
-      // isRequired: true,
-      // minLength: true,
-    },
-  },
-  name: {
-    value: "",
-    placeholder: "Name...",
-    valid: false,
-    touched: false,
-    validationRules: {
-      // isRequired: true,
-      // minLength: true,
-    },
-  },
-};
-
-function UpdateCourtForm() {
+function UpdateCourtForm({ getData, courtData }) {
   const [formIsValid, setFormIsValid] = useState(false);
-  const [formValues, setFormValues] = useState(formInit);
+  const [formValues, setFormValues] = useState(courtData);
+  const [retrievedData, setRetrievedData] = useState(false);
   const [error, setError] = useState(0);
-
-  let navigate = useNavigate();
 
   function handleChange(event) {
     let name = event.target.name;
@@ -55,7 +21,7 @@ function UpdateCourtForm() {
 
     updatedFormElement.value = value;
     updatedFormElement.touched = true;
-    updatedFormElement.valid = LoginValidators(
+    updatedFormElement.valid = IdValidator(
       value,
       updatedFormElement.validationRules
     );
@@ -90,6 +56,17 @@ function UpdateCourtForm() {
     };
     updateCourt(court);
     console.log("You pressed the submit button!");
+  }
+
+  function handleGetData() {
+    getData(formValues["id"].value);
+    console.log(courtData["type"].value);
+    console.log(courtData["name"].value);
+    setFormValues(() => courtData);
+    console.log(formValues);
+    document.getElementById("typeField").value = formValues["type"].value;
+    document.getElementById("nameField").value = formValues["name"].value;
+    setRetrievedData(true);
   }
 
   return (
@@ -128,12 +105,6 @@ function UpdateCourtForm() {
           valid={formValues.type.valid}
           required
         />
-        {formValues.type.touched && !formValues.type.valid && (
-          <div className={"error-message"}>
-            {" "}
-            * Type must have a valid format *{" "}
-          </div>
-        )}
       </FormGroup>
 
       <FormGroup id="name">
@@ -149,23 +120,28 @@ function UpdateCourtForm() {
           valid={formValues.name.valid}
           required
         />
-        {formValues.name.touched && !formValues.name.valid && (
-          <div className={"error-message"}>
-            {" "}
-            * Name must have a valid format *{" "}
-          </div>
-        )}
       </FormGroup>
 
       <div style={{ display: "flex", justifyContent: "center" }}>
         <Button
           type={"submit"}
           color={"primary"}
-          disabled={!formIsValid}
+          disabled={!retrievedData}
           onClick={handleSubmit}
+          style={{ margin: "0 1% 0 1%" }}
         >
           {" "}
-          Login{" "}
+          Update{" "}
+        </Button>
+        <Button
+          type={"submit"}
+          color={"primary"}
+          disabled={!formIsValid}
+          onClick={handleGetData}
+          style={{ margin: "0 1% 0 1%" }}
+        >
+          {" "}
+          Get Court Data{" "}
         </Button>
       </div>
 

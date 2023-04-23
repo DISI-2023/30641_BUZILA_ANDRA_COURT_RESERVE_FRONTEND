@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button, Modal, ModalBody, ModalHeader } from "reactstrap";
 import UpdateCourtForm from "./update-court-form";
 
-function UpdateCourtModal() {
+function UpdateCourtModal({ getData, courtData }) {
   const [isSelected, setIsSelected] = useState(false);
 
   function toggleIsSelected() {
@@ -20,7 +20,7 @@ function UpdateCourtModal() {
           Modify a court's data:{" "}
         </ModalHeader>
         <ModalBody>
-          <UpdateCourtForm />
+          <UpdateCourtForm getData={getData} courtData={courtData} />
         </ModalBody>
       </Modal>
     </div>
