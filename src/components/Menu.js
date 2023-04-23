@@ -6,6 +6,7 @@ import "./menu.scss";
 import Logo from "../assets/logoo.png";
 import LoginModal from "../components/login-modal";
 import { AppContext } from "../App";
+import { deleteUser } from "./delete-user";
 
 const Menu = () => {
   const { isLoggedIn, isAdmin } = useContext(AppContext);
@@ -46,7 +47,7 @@ const Menu = () => {
               </Link>
             </NavItem>
             <NavItem>
-              <Link tag={Link} to={PAGES_URL.Home}>
+              <Link tag={Link} to={PAGES_URL.Home} onClick={deleteUser}>
                 Logout
               </Link>
             </NavItem>
@@ -54,17 +55,17 @@ const Menu = () => {
         ) : (
           <>
             <NavItem>
-              <Link tag={Link} to={PAGES_URL.Home}>
+              <Link tag={Link} to={PAGES_URL.Reservations}>
                 Courts
               </Link>
             </NavItem>
             <NavItem>
-              <Link tag={Link} to={PAGES_URL.Home}>
+              <Link tag={Link} to={PAGES_URL.Register}>
                 Register
               </Link>
             </NavItem>
             <NavItem>
-              <Link tag={Link} to={PAGES_URL.Login}>
+              <Link tag={Link} to={PAGES_URL.Home}>
                 <LoginModal />
               </Link>
             </NavItem>
