@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import validator from "validator";
-import { useNavigate } from "react-router-dom";
 import "./register.scss";
 import { postRequest } from "../../api/httpUtils";
-import { PAGES_URL } from "../../constants/PagesUrl";
 import { validateEmail } from "../../validators/EmailValidator";
 
 const Register = () => {
   const [input, setInput] = useState({
+    firstname: "",
+    lastname: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -36,23 +36,17 @@ const Register = () => {
   const onFinish = async (e) => {
     e.preventDefault();
     try {
-      const response = await postRequest("/User", {
-        //changes may be needed after the backend is ready
-        id: 0,
+      const response = await postRequest("/register", {
+        firstname: input.firstname,
+        lastname: input.lastname,
         email: input.email,
-        password: input.passwordhash,
+        password: input.password,
       });
       if (response.status === 200) {
         setRegistrationSuccess(true);
       }
     } catch (err) {
       setError({ ...error, wrongInputFormat: err.response.data });
-    }
-    try {
-      //changes may be needed after the backend is ready
-      await postRequest("/User/ExtractUserId", input.email);
-    } catch (err) {
-      setError({ ...error, wrongInputFormat: "Email format is wrong!" });
     }
   };
 
@@ -123,6 +117,24 @@ const Register = () => {
       <div className="background-box">
         <form>
           <h3>Create a new account</h3>
+          <div className="form-line">
+            <input
+              type="text"
+              name="firstname"
+              placeholder="Firstname"
+              value={input.firstname}
+              onChange={onInputChange}
+            ></input>
+          </div>
+          <div className="form-line">
+            <input
+              type="text"
+              name="lastname"
+              placeholder="Lastname"
+              value={input.lastname}
+              onChange={onInputChange}
+            ></input>
+          </div>
           <div className="form-line">
             <input
               type="text"

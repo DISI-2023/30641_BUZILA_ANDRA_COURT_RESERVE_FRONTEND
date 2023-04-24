@@ -1,10 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState, useContext } from 'react';
 import { FormGroup, Input, Label, Button} from 'reactstrap';
 
 import LoginValidators from "../validators/login-validators";
 import ErrorHandler from "../commons/errorhandling/error-handler";
 import * as UserAPI from "../api/login-api";
 import {useNavigate} from "react-router-dom";
+import { AppContext } from "../App";
 
 const formInit = {
     email: {
@@ -29,7 +30,7 @@ const formInit = {
 };
 
 function LoginForm() {
-
+    const { setIsLoggedIn, setIsAdmin } = useContext(AppContext);
     const [formIsValid, setFormIsValid] = useState(false);
     const [formValues, setFormValues] = useState(formInit);
     const [passwordType, setPasswordType] = useState("password");
@@ -66,7 +67,6 @@ function LoginForm() {
     }
 
     function loginUser(user) {
-        console.log("POST STARTS!");
         return UserAPI.loginUser(user, (result, status) => {
             if (result !== null && (status === 200 || status === 201)) {
                 saveUser(result);
@@ -74,7 +74,8 @@ function LoginForm() {
                 if(loggedUser != null) {
                     let role = JSON.parse(loggedUser).role;
                     if(role === "admin"){
-                        navigate("/"); // change it to admin page;
+                        setIsAdmin(true);
+                        navigate("/"); // change it to client page;
                     }
                     else if(role === "client"){
                         navigate("/"); // change it to client page;
@@ -86,12 +87,18 @@ function LoginForm() {
         });
     }
 
+    const onClickLogin = () => {
+        localStorage.setItem("isLoggedIn", true);
+        setIsLoggedIn(true);
+    }
+
     function handleSubmit() {
         let user = {
             email: formValues.email.value,
             password: formValues.password.value
         };
-        // loginUser(user);
+        loginUser(user);
+        onClickLogin();
         console.log("You pressed the submit button!");
     }
 
