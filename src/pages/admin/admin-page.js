@@ -5,6 +5,8 @@ import { Button, Input } from "reactstrap";
 import * as ReservationsAPI from "../../api/reservations-api";
 import * as AdminAPI from "../../api/admin-api";
 import UpdateCourtModal from "../../components/update-court-modal";
+import AddLocationForm from "../../components/AddLocationForm";
+import "./admin-page.scss";
 
 const courtsColumns = [
   { Header: "Location ID", accessor: "location_id" },
@@ -44,6 +46,7 @@ const formInit = {
 };
 
 function AdminPage() {
+  const [isAddLocationOpen, setIsAddLocationOpen] = useState(false);
   const [data, setData] = useState([]);
   const [columns] = useState(courtsColumns);
   const [courtId, setCourtId] = useState(null);
@@ -54,6 +57,9 @@ function AdminPage() {
     getAllCourtsWithLocationData();
   }, []);
 
+  const onAddLocationClicked = () => {
+    setIsAddLocationOpen(true);
+  };
   function getAllCourtsWithLocationData() {
     ReservationsAPI.getAllLocationsWithCourts((result, status) => {
       if (result != null && status === 200) {
@@ -111,6 +117,14 @@ function AdminPage() {
 
   return (
     <div>
+      {!isAddLocationOpen && (
+        <button className="btn-add" onClick={onAddLocationClicked}>
+          Add location
+        </button>
+      )}
+      {isAddLocationOpen && (
+        <AddLocationForm setIsOpen={setIsAddLocationOpen} />
+      )}
       <SimpleTable data={data} columns={columns} />
       <div
         style={{
