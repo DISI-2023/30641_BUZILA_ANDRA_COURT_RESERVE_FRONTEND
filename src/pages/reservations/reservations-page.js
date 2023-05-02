@@ -33,32 +33,20 @@ function ReservationsPage() {
   function fetchAvailableCourts(searchInput) {
     return ReservationsAPI.getAvailableCourts(searchInput, (result, status) => {
       if (result !== null && status === 200) {
-        setData([]);
-        let index = 0;
-        let newElement = {
-          location_id: 0,
-          location_address: 0,
-          location_longitude: 0,
-          location_latitude: 0,
-          type: "",
-          name: "",
-        };
-        result.availableCourts.forEach((elem) => {
-          console.log("Elem: " + elem);
-          if (index % 3 === 1) {
-            newElement.type = elem;
-          } else if (index % 3 === 2) {
-            newElement.name = elem;
-          } else {
-            newElement.location_id = result.locationId;
-            newElement.location_address = result.locationAddress;
-            newElement.location_longitude = result.locationLongitude;
-            newElement.location_latitude = result.locationLatitude;
-            console.log(newElement.locationId);
-            setData((previousData) => [...previousData, newElement]);
-          }
-          index++;
-        });
+        let courtsList = [];
+        let index;
+        for (index = 0; index < result.availableCourts.length; index += 3) {
+          let newElement = {
+            location_id: result.locationId,
+            location_address: result.locationAddress,
+            location_longitude: result.locationLongitude,
+            location_latitude: result.locationLatitude,
+            type: result.availableCourts[index + 1],
+            name: result.availableCourts[index + 2],
+          };
+          courtsList.push(newElement);
+        }
+        setData((prevState) => courtsList);
       } else {
         setError(status);
       }
