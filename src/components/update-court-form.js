@@ -5,11 +5,34 @@ import ErrorHandler from "../commons/errorhandling/error-handler";
 import * as AdminAPI from "../api/admin-api";
 import IdValidator from "../validators/id-validator";
 
-function UpdateCourtForm({ getData, courtData }) {
+function UpdateCourtForm({ getData, courtData, updateTable, toggleModal }) {
   const [formIsValid, setFormIsValid] = useState(false);
   const [formValues, setFormValues] = useState(courtData);
   const [retrievedData, setRetrievedData] = useState(false);
   const [error, setError] = useState(0);
+
+  useEffect(() => {
+    resetFields();
+  }, []);
+
+  function resetFields() {
+    let elements = { ...formValues };
+    elements["id"].value = "";
+    elements["id"].valid = false;
+    elements["id"].touched = false;
+
+    elements["type"].value = "";
+    elements["type"].valid = true;
+    elements["type"].touched = false;
+
+    elements["name"].value = "";
+    elements["name"].valid = true;
+    elements["name"].touched = false;
+    setFormValues(() => elements);
+
+    let formIsValid = false;
+    setFormIsValid(() => formIsValid);
+  }
 
   function handleChange(event) {
     let name = event.target.name;
@@ -39,9 +62,9 @@ function UpdateCourtForm({ getData, courtData }) {
   function updateCourt(court) {
     return AdminAPI.modifyCourt(court, (result, status) => {
       if (result !== null && (status === 200 || status === 201)) {
-        console.log(
-          "(FROM POST)Successfully updated court with id: " + court.id
-        );
+        updateTable();
+        alert("Updated successfully!");
+        toggleModal();
       } else {
         setError(status);
       }
@@ -55,7 +78,7 @@ function UpdateCourtForm({ getData, courtData }) {
       name: formValues.name.value,
     };
     updateCourt(court);
-    console.log("You pressed the submit button!");
+    resetFields();
   }
 
   function handleGetData() {
@@ -79,7 +102,7 @@ function UpdateCourtForm({ getData, courtData }) {
           id="idField"
           placeholder={formValues.id.placeholder}
           onChange={handleChange}
-          defaultValue={formValues.id.value}
+          value={formValues.id.value}
           touched={formValues.id.touched ? 1 : 0}
           valid={formValues.id.valid}
           required
@@ -100,7 +123,7 @@ function UpdateCourtForm({ getData, courtData }) {
           id="typeField"
           placeholder={formValues.type.placeholder}
           onChange={handleChange}
-          defaultValue={formValues.type.value}
+          value={formValues.type.value}
           touched={formValues.type.touched ? 1 : 0}
           valid={formValues.type.valid}
           required
@@ -115,7 +138,7 @@ function UpdateCourtForm({ getData, courtData }) {
           id="nameField"
           placeholder={formValues.name.placeholder}
           onChange={handleChange}
-          defaultValue={formValues.name.value}
+          value={formValues.name.value}
           touched={formValues.name.touched ? 1 : 0}
           valid={formValues.name.valid}
           required
