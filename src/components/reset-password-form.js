@@ -1,6 +1,16 @@
-import { Button, FormGroup, Input, Label } from "reactstrap";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardTitle,
+  FormGroup,
+  Input,
+  Label,
+} from "reactstrap";
 import React, { useState } from "react";
 import LoginValidators from "../validators/login-validators";
+import * as ResetPasswordAPI from "../api/reset-password-api";
+import { useNavigate } from "react-router-dom";
 
 const formInit = {
   email: {
@@ -9,7 +19,7 @@ const formInit = {
     valid: false,
     touched: false,
     validationRules: {
-      emailValidator: true,
+      emailValidation: true,
     },
   },
   password: {
@@ -39,6 +49,8 @@ function ResetPasswordForm() {
   const [formValues, setFormValues] = useState(formInit);
   const [passwordType, setPasswordType] = useState("password");
   const [confirmPasswordType, setConfirmPasswordType] = useState("password");
+
+  let navigate = useNavigate();
 
   function togglePassword() {
     if (passwordType === "password") {
@@ -81,7 +93,16 @@ function ResetPasswordForm() {
     setFormIsValid(() => formIsValid);
   }
 
-  function resetPassword(data) {}
+  function resetPassword(data) {
+    return ResetPasswordAPI.resetPassword(data, (result, status) => {
+      if (result !== null && status === 200) {
+        alert("Your password has been reset successfully!");
+        navigate("/");
+      } else {
+        alert("There isn't an account with this email!");
+      }
+    });
+  }
 
   function handleSubmit() {
     let data = {
@@ -93,91 +114,108 @@ function ResetPasswordForm() {
   }
 
   return (
-    <div>
-      <FormGroup id="email">
-        <Label for="emailField"> Email: </Label>
-        <Input
-          type={"text"}
-          name="email"
-          id="emailField"
-          placeholder={formValues.email.placeholder}
-          onChange={handleChange}
-          value={formValues.email.value}
-          touched={formValues.email.touched ? 1 : 0}
-          valid={formValues.email.valid}
-          required
-        />
-        {formValues.email.touched && !formValues.email.valid && (
-          <div className={"error-message"}>
-            {" "}
-            * Email must have a valid format *{" "}
-          </div>
-        )}
-      </FormGroup>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        padding: "5% 0 0 0",
+      }}
+    >
+      <Card className="col-sm-6">
+        <CardTitle style={{ fontWeight: "bold" }}>
+          Enter your email and new password:
+        </CardTitle>
+        <CardBody>
+          <FormGroup id="email">
+            <Label for="emailField"> Email: </Label>
+            <Input
+              type={"text"}
+              name="email"
+              id="emailField"
+              placeholder={formValues.email.placeholder}
+              onChange={handleChange}
+              value={formValues.email.value}
+              touched={formValues.email.touched ? 1 : 0}
+              valid={formValues.email.valid}
+              required
+            />
+            {formValues.email.touched && !formValues.email.valid && (
+              <div className={"error-message"}>
+                {" "}
+                * Email must have a valid format *{" "}
+              </div>
+            )}
+          </FormGroup>
 
-      <FormGroup id="password">
-        <Label for="passwordField"> Password: &nbsp; </Label>
-        <Input type={"checkbox"} onClick={togglePassword} />
-        <Input
-          type={passwordType}
-          name="password"
-          id="passwordField"
-          placeholder={formValues.password.placeholder}
-          onChange={handleChange}
-          value={formValues.password.value}
-          touched={formValues.password.touched ? 1 : 0}
-          valid={formValues.password.valid}
-          required
-        />
-        {formValues.password.touched && !formValues.password.valid && (
-          <div className={"error-message"}>
-            {" "}
-            * Password must have a valid format *{" "}
-          </div>
-        )}
-      </FormGroup>
+          <FormGroup id="password">
+            <Label for="passwordField"> Password: &nbsp; </Label>
+            <Input type={"checkbox"} onClick={togglePassword} />
+            <Input
+              type={passwordType}
+              name="password"
+              id="passwordField"
+              placeholder={formValues.password.placeholder}
+              onChange={handleChange}
+              value={formValues.password.value}
+              touched={formValues.password.touched ? 1 : 0}
+              valid={formValues.password.valid}
+              required
+            />
+            {formValues.password.touched && !formValues.password.valid && (
+              <div className={"error-message"}>
+                {" "}
+                * Password must have a valid format *{" "}
+              </div>
+            )}
+          </FormGroup>
 
-      <FormGroup id="confirmPassword">
-        <Label for="confirmPasswordField"> Confirm Password: &nbsp; </Label>
-        <Input type={"checkbox"} onClick={toggleConfirmPassword} />
-        <Input
-          type={confirmPasswordType}
-          name="confirmPassword"
-          id="confirmPasswordField"
-          placeholder={formValues.confirmPassword.placeholder}
-          onChange={handleChange}
-          value={formValues.confirmPassword.value}
-          touched={formValues.confirmPassword.touched ? 1 : 0}
-          valid={formValues.confirmPassword.valid}
-          required
-        />
-        {formValues.confirmPassword.touched &&
-          !formValues.confirmPassword.valid &&
-          formValues.password.value !== formValues.confirmPassword.value && (
-            <div className={"error-message"}>
+          <FormGroup id="confirmPassword">
+            <Label for="confirmPasswordField"> Confirm Password: &nbsp; </Label>
+            <Input type={"checkbox"} onClick={toggleConfirmPassword} />
+            <Input
+              type={confirmPasswordType}
+              name="confirmPassword"
+              id="confirmPasswordField"
+              placeholder={formValues.confirmPassword.placeholder}
+              onChange={handleChange}
+              value={formValues.confirmPassword.value}
+              touched={formValues.confirmPassword.touched ? 1 : 0}
+              valid={formValues.confirmPassword.valid}
+              required
+            />
+            {formValues.confirmPassword.touched &&
+              !formValues.confirmPassword.valid &&
+              formValues.password.value !==
+                formValues.confirmPassword.value && (
+                <div className={"error-message"}>
+                  {" "}
+                  * Password must have a valid format *{" "}
+                </div>
+              )}
+            {formValues.password.value !== formValues.confirmPassword.value && (
+              <div className={"error-message"}>
+                {" "}
+                * Passwords must be the same to proceed registration *{" "}
+              </div>
+            )}
+          </FormGroup>
+
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Button
+              type={"submit"}
+              color={"primary"}
+              disabled={
+                !formIsValid ||
+                formValues.password.value !== formValues.confirmPassword.value
+              }
+              onClick={handleSubmit}
+            >
               {" "}
-              * Password must have a valid format *{" "}
-            </div>
-          )}
-        {formValues.password.value !== formValues.confirmPassword.value && (
-          <div className={"error-message"}>
-            {" "}
-            * Passwords must be the same to proceed registration *{" "}
+              Reset{" "}
+            </Button>
           </div>
-        )}
-      </FormGroup>
-
-      <div style={{ display: "flex", justifyContent: "center" }}>
-        <Button
-          type={"submit"}
-          color={"primary"}
-          disabled={!formIsValid}
-          onClick={handleSubmit}
-        >
-          {" "}
-          Reset{" "}
-        </Button>
-      </div>
+        </CardBody>
+      </Card>
     </div>
   );
 }
