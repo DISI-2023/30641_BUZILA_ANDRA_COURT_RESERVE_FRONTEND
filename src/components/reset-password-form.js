@@ -195,7 +195,7 @@ function ResetPasswordForm() {
             {formValues.password.value !== formValues.confirmPassword.value && (
               <div className={"error-message"}>
                 {" "}
-                * Passwords must be the same to proceed registration *{" "}
+                * Passwords must be the same to proceed *{" "}
               </div>
             )}
           </FormGroup>
