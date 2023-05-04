@@ -1,11 +1,6 @@
-import React, { useState, useContext } from "react";
-import { FormGroup, Input, Label, Button } from "reactstrap";
-
+import { Button, FormGroup, Input, Label } from "reactstrap";
+import React, { useState } from "react";
 import LoginValidators from "../validators/login-validators";
-import ErrorHandler from "../commons/errorhandling/error-handler";
-import * as UserAPI from "../api/login-api";
-import { useNavigate } from "react-router-dom";
-import { AppContext } from "../App";
 
 const formInit = {
   email: {
@@ -14,7 +9,7 @@ const formInit = {
     valid: false,
     touched: false,
     validationRules: {
-      emailValidation: true,
+      emailValidator: true,
     },
   },
   password: {
@@ -27,16 +22,39 @@ const formInit = {
       minLength: true,
     },
   },
+  confirmPassword: {
+    value: "",
+    placeholder: "Enter your password one last time...",
+    valid: false,
+    touched: false,
+    validationRules: {
+      isRequired: true,
+      minLength: true,
+    },
+  },
 };
 
-function LoginForm() {
-  const { setIsLoggedIn, setIsAdmin } = useContext(AppContext);
+function ResetPasswordForm() {
   const [formIsValid, setFormIsValid] = useState(false);
   const [formValues, setFormValues] = useState(formInit);
   const [passwordType, setPasswordType] = useState("password");
+  const [confirmPasswordType, setConfirmPasswordType] = useState("password");
 
-  const [error, setError] = useState(0);
-  let navigate = useNavigate();
+  function togglePassword() {
+    if (passwordType === "password") {
+      setPasswordType("text");
+    } else {
+      setPasswordType("password");
+    }
+  }
+
+  function toggleConfirmPassword() {
+    if (confirmPasswordType === "password") {
+      setConfirmPasswordType("text");
+    } else {
+      setConfirmPasswordType("password");
+    }
+  }
 
   function handleChange(event) {
     let name = event.target.name;
@@ -63,57 +81,15 @@ function LoginForm() {
     setFormIsValid(() => formIsValid);
   }
 
-  function saveUser(userData) {
-    localStorage.setItem("loggedUser", JSON.stringify(userData));
-    console.log(
-      "(FROM POST)User id and role: " +
-        JSON.parse(localStorage.getItem("loggedUser")).id +
-        ", " +
-        JSON.parse(localStorage.getItem("loggedUser")).role
-    );
-  }
-
-  function loginUser(user) {
-    return UserAPI.loginUser(user, (result, status) => {
-      if (result !== null && (status === 200 || status === 201)) {
-        saveUser(result);
-        let loggedUser = localStorage.getItem("loggedUser");
-        if (loggedUser != null) {
-          let role = JSON.parse(loggedUser).role;
-          if (role === "admin") {
-            setIsAdmin(true);
-            navigate("/"); // change it to client page;
-          } else if (role === "client") {
-            navigate("/"); // change it to client page;
-          }
-        }
-      } else {
-        setError(status);
-      }
-    });
-  }
-
-  const onClickLogin = () => {
-    localStorage.setItem("isLoggedIn", true);
-    setIsLoggedIn(true);
-  };
+  function resetPassword(data) {}
 
   function handleSubmit() {
-    let user = {
+    let data = {
       email: formValues.email.value,
       password: formValues.password.value,
+      confirmPassword: formValues.confirmPassword.value,
     };
-    loginUser(user);
-    onClickLogin();
-    console.log("You pressed the submit button!");
-  }
-
-  function togglePassword() {
-    if (passwordType === "password") {
-      setPasswordType("text");
-    } else {
-      setPasswordType("password");
-    }
+    resetPassword(data);
   }
 
   return (
@@ -126,7 +102,7 @@ function LoginForm() {
           id="emailField"
           placeholder={formValues.email.placeholder}
           onChange={handleChange}
-          defaultValue={formValues.email.value}
+          value={formValues.email.value}
           touched={formValues.email.touched ? 1 : 0}
           valid={formValues.email.valid}
           required
@@ -148,7 +124,7 @@ function LoginForm() {
           id="passwordField"
           placeholder={formValues.password.placeholder}
           onChange={handleChange}
-          defaultValue={formValues.password.value}
+          value={formValues.password.value}
           touched={formValues.password.touched ? 1 : 0}
           valid={formValues.password.valid}
           required
@@ -161,6 +137,36 @@ function LoginForm() {
         )}
       </FormGroup>
 
+      <FormGroup id="confirmPassword">
+        <Label for="confirmPasswordField"> Confirm Password: &nbsp; </Label>
+        <Input type={"checkbox"} onClick={toggleConfirmPassword} />
+        <Input
+          type={confirmPasswordType}
+          name="confirmPassword"
+          id="confirmPasswordField"
+          placeholder={formValues.confirmPassword.placeholder}
+          onChange={handleChange}
+          value={formValues.confirmPassword.value}
+          touched={formValues.confirmPassword.touched ? 1 : 0}
+          valid={formValues.confirmPassword.valid}
+          required
+        />
+        {formValues.confirmPassword.touched &&
+          !formValues.confirmPassword.valid &&
+          formValues.password.value !== formValues.confirmPassword.value && (
+            <div className={"error-message"}>
+              {" "}
+              * Password must have a valid format *{" "}
+            </div>
+          )}
+        {formValues.password.value !== formValues.confirmPassword.value && (
+          <div className={"error-message"}>
+            {" "}
+            * Passwords must be the same to proceed registration *{" "}
+          </div>
+        )}
+      </FormGroup>
+
       <div style={{ display: "flex", justifyContent: "center" }}>
         <Button
           type={"submit"}
@@ -169,13 +175,10 @@ function LoginForm() {
           onClick={handleSubmit}
         >
           {" "}
-          Login{" "}
+          Reset{" "}
         </Button>
       </div>
-
-      {error > 0 && <ErrorHandler />}
     </div>
   );
 }
-
-export default LoginForm;
+export default ResetPasswordForm;
