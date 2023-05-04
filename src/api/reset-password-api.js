@@ -5,7 +5,7 @@ const endpoint = {
   resetPassword: "/resetPassword",
 };
 
-function getResetPasswordEmail(email, callback) {
+function getResetPasswordEmail(data, callback) {
   let request = new Request(
     HOST.backend_api + endpoint.resetPassword + "/changePassword",
     {
@@ -14,7 +14,7 @@ function getResetPasswordEmail(email, callback) {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(email),
+      body: JSON.stringify(data),
     }
   );
 
@@ -36,4 +36,5 @@ function resetPassword(data, callback) {
 
   RestApiClient.performRequest(request, callback);
 }
+
 export { getResetPasswordEmail, resetPassword };

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import LoginValidators from "../validators/login-validators";
 import { Button, FormGroup, Input, Label } from "reactstrap";
-import ErrorHandler from "../commons/errorhandling/error-handler";
 import * as ResetPasswordAPI from "../api/reset-password-api";
 
 const emailInit = {
@@ -29,13 +28,15 @@ function GetEmailResetPasswordForm({ toggleModal }) {
     setFormEmail(() => updatedValue);
   }
 
-  function getEmail(email) {
-    return ResetPasswordAPI.getResetPasswordEmail(email);
+  function getEmail(data) {
+    return ResetPasswordAPI.getResetPasswordEmail(data);
   }
 
   function handleSubmit() {
-    let email = formEmail.value;
-    getEmail(email);
+    let data = {
+      email: formEmail.value,
+    };
+    getEmail(data);
     alert("Check your mailbox to reset your password!");
     toggleModal();
   }

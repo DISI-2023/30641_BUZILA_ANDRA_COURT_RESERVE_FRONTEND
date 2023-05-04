@@ -6,6 +6,7 @@ import ErrorHandler from "../commons/errorhandling/error-handler";
 import * as UserAPI from "../api/login-api";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../App";
+import GetEmailResetPasswordModal from "./get-email-reset-password-modal";
 
 const formInit = {
   email: {
@@ -171,6 +172,10 @@ function LoginForm() {
           {" "}
           Login{" "}
         </Button>
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <GetEmailResetPasswordModal />
       </div>
 
       {error > 0 && <ErrorHandler />}
