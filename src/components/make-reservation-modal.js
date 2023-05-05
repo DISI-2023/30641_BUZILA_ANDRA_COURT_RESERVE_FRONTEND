@@ -12,7 +12,12 @@ function MakeReservationModal() {
 
   return (
     <div>
-      <Button type={"button"} color="primary" onClick={toggleIsSelected}>
+      <Button
+        type={"button"}
+        color="primary"
+        onClick={toggleIsSelected}
+        style={{ margin: "1% 0 0 0" }}
+      >
         Make a reservation
       </Button>
       <Modal isOpen={isSelected} toggle={toggleIsSelected} size="lg">
