@@ -1,10 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { FormGroup, Input, Label, Button } from "reactstrap";
 
 import LoginValidators from "../validators/login-validators";
 import ErrorHandler from "../commons/errorhandling/error-handler";
 import * as UserAPI from "../api/login-api";
-import { useNavigate } from "react-router-dom";
 import { AppContext } from "../App";
 
 const formInit = {
@@ -29,14 +28,32 @@ const formInit = {
   },
 };
 
-function LoginForm() {
+function LoginForm({ toggleModal }) {
   const { setIsLoggedIn, setIsAdmin } = useContext(AppContext);
   const [formIsValid, setFormIsValid] = useState(false);
   const [formValues, setFormValues] = useState(formInit);
   const [passwordType, setPasswordType] = useState("password");
 
   const [error, setError] = useState(0);
-  let navigate = useNavigate();
+
+  useEffect(() => {
+    resetFields();
+  }, []);
+
+  function resetFields() {
+    let elements = { ...formValues };
+    elements["email"].value = "";
+    elements["email"].valid = false;
+    elements["email"].touched = false;
+
+    elements["password"].value = "";
+    elements["password"].valid = false;
+    elements["password"].touched = false;
+    setFormValues(() => elements);
+
+    let formIsValid = false;
+    setFormIsValid(() => formIsValid);
+  }
 
   function handleChange(event) {
     let name = event.target.name;
@@ -65,28 +82,22 @@ function LoginForm() {
 
   function saveUser(userData) {
     localStorage.setItem("loggedUser", JSON.stringify(userData));
-    console.log(
-      "(FROM POST)User id and role: " +
-        JSON.parse(localStorage.getItem("loggedUser")).id +
-        ", " +
-        JSON.parse(localStorage.getItem("loggedUser")).role
-    );
   }
 
   function loginUser(user) {
     return UserAPI.loginUser(user, (result, status) => {
       if (result !== null && (status === 200 || status === 201)) {
         saveUser(result);
+        onClickLogin();
         let loggedUser = localStorage.getItem("loggedUser");
         if (loggedUser != null) {
           let role = JSON.parse(loggedUser).role;
           if (role === "admin") {
             setIsAdmin(true);
-            navigate("/"); // change it to client page;
-          } else if (role === "client") {
-            navigate("/"); // change it to client page;
+            localStorage.setItem("isAdmin", true);
           }
         }
+        toggleModal();
       } else {
         setError(status);
       }
@@ -104,8 +115,7 @@ function LoginForm() {
       password: formValues.password.value,
     };
     loginUser(user);
-    onClickLogin();
-    console.log("You pressed the submit button!");
+    resetFields();
   }
 
   function togglePassword() {
@@ -126,7 +136,7 @@ function LoginForm() {
           id="emailField"
           placeholder={formValues.email.placeholder}
           onChange={handleChange}
-          defaultValue={formValues.email.value}
+          value={formValues.email.value}
           touched={formValues.email.touched ? 1 : 0}
           valid={formValues.email.valid}
           required
@@ -148,7 +158,7 @@ function LoginForm() {
           id="passwordField"
           placeholder={formValues.password.placeholder}
           onChange={handleChange}
-          defaultValue={formValues.password.value}
+          value={formValues.password.value}
           touched={formValues.password.touched ? 1 : 0}
           valid={formValues.password.valid}
           required

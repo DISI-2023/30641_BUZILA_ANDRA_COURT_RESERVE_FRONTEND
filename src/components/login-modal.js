@@ -20,7 +20,7 @@ function LoginModal() {
           Login to your account:{" "}
         </ModalHeader>
         <ModalBody>
-          <LoginForm />
+          <LoginForm toggleModal={toggleIsSelected} />
         </ModalBody>
       </Modal>
     </div>
