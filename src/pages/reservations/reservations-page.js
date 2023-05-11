@@ -9,6 +9,7 @@ const courtsColumns = [
   { Header: "Location Address", accessor: "location_address" },
   { Header: "Location Longitude", accessor: "location_longitude" },
   { Header: "Location Latitude", accessor: "location_latitude" },
+  { Header: "Court ID", accessor: "id" },
   { Header: "Court Type", accessor: "type" },
   { Header: "Court Name", accessor: "name" },
 ];
@@ -41,6 +42,7 @@ function ReservationsPage() {
             location_address: result.locationAddress,
             location_longitude: result.locationLongitude,
             location_latitude: result.locationLatitude,
+            id: result.availableCourts[index],
             type: result.availableCourts[index + 1],
             name: result.availableCourts[index + 2],
           };
@@ -63,6 +65,7 @@ function ReservationsPage() {
             location_address: elem.location_address,
             location_longitude: elem.location_longitude,
             location_latitude: elem.location_latitude,
+            id: elem.id,
             type: elem.type,
             name: elem.name,
           };
