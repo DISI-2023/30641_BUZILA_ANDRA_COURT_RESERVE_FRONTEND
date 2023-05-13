@@ -19,19 +19,26 @@ function SearchCourts({ searchFunction, spareFunction }) {
   }
 
   function submitSearch() {
-    if (
-      time !== null &&
-      value !== null &&
-      locationId !== null &&
-      locationId !== ""
-    ) {
-      value.setHours(Number(time.split(":")[0]));
-      let searchInput = {
-        locationId: locationId,
-        dateForCourts: value.toISOString(),
-      };
-      searchFunction(searchInput);
+    if (locationId !== null && locationId !== "") {
+      if (time !== null && value !== null) {
+        value.setHours(Number(time.split(":")[0]));
+        let searchInput = {
+          locationId: locationId,
+          dateForCourts: value.toISOString(),
+        };
+        searchFunction(searchInput);
+      } else {
+        alert(
+          "All courts available right now will be returned because date or time fields are empty!"
+        );
+        let searchInput = {
+          locationId: locationId,
+          dateForCourts: null,
+        };
+        searchFunction(searchInput);
+      }
     } else {
+      alert("No location id, all courts are returned!");
       spareFunction();
     }
   }

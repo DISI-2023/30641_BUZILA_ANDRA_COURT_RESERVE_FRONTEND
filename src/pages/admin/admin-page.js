@@ -151,6 +151,7 @@ function AdminPage() {
         <UpdateCourtModal
           getData={getCourtData}
           courtData={courtData}
+          updateTable={getAllCourtsWithLocationData}
           style={{ alignSelf: "center", margin: "0 1% 0 1%" }}
         />
       </div>
