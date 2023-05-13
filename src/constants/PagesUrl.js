@@ -3,4 +3,5 @@ export const PAGES_URL = {
   Register: "/register",
   Courts: "/courts",
   Locations: "/locations",
+  ResetPassword: "/changePassword/resetPasswordUser",
 };
