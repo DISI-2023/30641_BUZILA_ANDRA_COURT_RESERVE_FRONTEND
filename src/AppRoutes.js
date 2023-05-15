@@ -5,6 +5,7 @@ import Register from "./pages/register/Register";
 import ReservationsPage from "./pages/reservations/reservations-page";
 import AdminPage from "./pages/admin/admin-page";
 import ResetPasswordPage from "./pages/resetpassword/reset-password-page";
+import MyReservations from "./pages/my-reservations/MyReservations";
 
 const ApplicationRoutes = () => {
   return [
@@ -27,6 +28,10 @@ const ApplicationRoutes = () => {
     {
       path: PAGES_URL.ResetPassword,
       element: <ResetPasswordPage />,
+    },
+    {
+      path: PAGES_URL.MyReservations,
+      element: <MyReservations />,
     },
   ];
 };
