@@ -6,6 +6,7 @@ import * as ReservationsAPI from "../../api/reservations-api";
 import * as AdminAPI from "../../api/admin-api";
 import UpdateCourtModal from "../../components/update-court-modal";
 import AddLocationForm from "../../components/AddLocationForm";
+import TariffForm from "../../components/TariffForm";
 import AddCourtForm from "../../components/AddCourtForm";
 import "./admin-page.scss";
 
@@ -54,6 +55,7 @@ function AdminPage() {
   const [courtId, setCourtId] = useState(null);
   const [courtData, setCourtData] = useState(formInit);
   const [error, setError] = useState(0);
+  const [isAddTariffOpen, setIsAddTariffOpen] = useState(false);
 
   useEffect(() => {
     getAllCourtsWithLocationData();
@@ -61,6 +63,9 @@ function AdminPage() {
 
   const onAddLocationClicked = () => {
     setIsAddLocationOpen(true);
+  };
+  const onAddTariffClicked = () => {
+    setIsAddTariffOpen(true);
   };
 
   const onAddCourtClicked = () => {
@@ -137,6 +142,12 @@ function AdminPage() {
           Add court
         </button>
       )}
+      {!isAddTariffOpen && (
+        <button className="btn-add" onClick={onAddTariffClicked}>
+          Add tariff
+        </button>
+      )}
+      {isAddTariffOpen && <TariffForm setIsOpen={setIsAddTariffOpen} />}
       {isAddCourtOpen && <AddCourtForm setIsOpen={setIsAddCourtOpen} />}
       <SimpleTable data={data} columns={columns} />
       <div
