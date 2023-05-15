@@ -61,7 +61,7 @@ const Menu = () => {
               </>
             )}
             <NavItem>
-              <Link tag={Link} to={PAGES_URL.Home}>
+              <Link tag={Link} to={PAGES_URL.MyReservations}>
                 Reservation
               </Link>
             </NavItem>
