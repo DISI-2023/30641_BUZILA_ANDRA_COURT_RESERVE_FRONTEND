@@ -1,8 +1,10 @@
 import SimpleTable from "../../components/table/simple-table";
 import * as ReservationsAPI from "../../api/reservations-api";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ErrorHandler from "../../commons/errorhandling/error-handler";
 import SearchCourts from "../../components/search-courts";
+import { AppContext } from "../../App";
+import MakeReservationModal from "../../components/make-reservation-modal";
 
 const courtsColumns = [
   { Header: "Location ID", accessor: "location_id" },
@@ -26,6 +28,8 @@ function ReservationsPage() {
   const [data, setData] = useState([]);
   const [columns] = useState(courtsColumns);
   const [error, setError] = useState(0);
+
+  const { isLoggedIn } = useContext(AppContext);
 
   useEffect(() => {
     fetchAllLocationsWithCourts();
@@ -80,6 +84,7 @@ function ReservationsPage() {
 
   return (
     <div>
+      {isLoggedIn && <MakeReservationModal />}
       <SimpleTable data={data} columns={columns} />
       <SearchCourts
         searchFunction={fetchAvailableCourts}

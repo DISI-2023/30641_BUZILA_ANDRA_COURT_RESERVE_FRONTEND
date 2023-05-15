@@ -4,4 +4,5 @@ export const PAGES_URL = {
   Courts: "/courts",
   Locations: "/locations",
   ResetPassword: "/changePassword/resetPasswordUser",
+  MyReservations: "/myReservations",
 };
