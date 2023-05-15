@@ -1,21 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./location.scss";
-import { postRequest } from "../api/httpUtils";
+import { postRequest, getRequest } from "../api/httpUtils";
 
 const TariffForm = ({ setIsOpen }) => {
   const [addSuccessfully, setAddSuccessfully] = useState(false);
   const [criterion, setCriterion] = useState(0);
   const [tariff, setTariff] = useState(0);
   const [location, setLocation] = useState("");
+  const [locations, setLocations] = useState([]);
+
+  useEffect(() => {
+    const getAllLocations = async () => {
+      try {
+        const response = await getRequest("/location/getAllLocations");
+        setLocations(response.data);
+      } catch (error) {
+        console.log("Error fetching locations", error);
+      }
+    };
+
+    getAllLocations();
+  }, []);
 
   const onCriterionChange = (event) => {
     setCriterion(event.target.value);
   };
 
-  const onLongitudeChange = (value) => {
+  const onTariffChange = (value) => {
     setTariff(value.target.value);
   };
-  const onLatitudeChange = (value) => {
+  const onLocationChange = (value) => {
     setLocation(value.target.value);
   };
 
@@ -49,6 +63,7 @@ const TariffForm = ({ setIsOpen }) => {
 
             <select onChange={onCriterionChange} value={criterion}>
               <option value="">Select Criterion</option>
+              <option value="pretDeBaza">Default tariff</option>
               <option value="vara">Vara</option>
               <option value="iarna">Iarna</option>
               <option value="weekend">Weekend</option>
@@ -60,18 +75,20 @@ const TariffForm = ({ setIsOpen }) => {
             <input
               type={"number"}
               placeholder="Value"
-              onChange={(value) => onLongitudeChange(value)}
+              onChange={(value) => onTariffChange(value)}
               value={tariff}
             />
           </div>
           <div className="form-line">
             <label>Location*</label>
-            <input
-              type={"text"}
-              placeholder="Location"
-              onChange={(value) => onLatitudeChange(value)}
-              value={location}
-            />
+            <select value={location} onChange={onLocationChange}>
+              <option value="">Select a location</option>
+              {locations.map((loc) => (
+                <option key={loc.id} value={loc.id}>
+                  {loc.address}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
         <div className="form-submit">
