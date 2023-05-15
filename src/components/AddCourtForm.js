@@ -1,12 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./location.scss";
-import { postRequest } from "../api/httpUtils";
+import { postRequest, getRequest } from "../api/httpUtils";
 
 const AddCourtForm = ({ setIsOpen }) => {
   const [addSuccessfully, setAddSuccessfully] = useState(false);
   const [type, setType] = useState("");
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
+  const [locations, setLocations] = useState([]);
+
+  useEffect(() => {
+    const getAllLocations = async () => {
+      try {
+        const response = await getRequest("/location/getAllLocations");
+        setLocations(response.data);
+      } catch (error) {
+        console.log("Error fetching locations", error);
+      }
+    };
+
+    getAllLocations();
+  }, []);
 
   const onNameChange = (value) => {
     setName(value.target.value);
@@ -65,12 +79,14 @@ const AddCourtForm = ({ setIsOpen }) => {
           </div>
           <div className="form-line">
             <label>Location*</label>
-            <input
-              type={"text"}
-              placeholder="Location"
-              onChange={(value) => onLocationChange(value)}
-              value={location}
-            />
+            <select value={location} onChange={onLocationChange}>
+              <option value="">Select a location</option>
+              {locations.map((loc) => (
+                <option key={loc.id} value={loc.id}>
+                  {loc.address}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
         <div className="form-submit">
